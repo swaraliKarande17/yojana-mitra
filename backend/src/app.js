@@ -2,7 +2,9 @@
 
 import express from "express";
 import cors from "cors";
+
 import schemeRoutes from "./routes/schemeRoutes.js";
+import searchRoutes from "./routes/searchRoutes.js";
 
 const app = express();
 
@@ -17,5 +19,6 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/api/schemes", schemeRoutes);
+app.use("/api/search", searchRoutes);
 
 export default app;
