@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 
 import { retrieveRelevantSchemes } from "../services/retrievalService.js";
 import { generateText } from "../services/geminiService.js";
+import { validateGroundedAnswer } from "../services/evalService.js";
 
 const router = Router();
 
@@ -104,8 +105,24 @@ router.post("/", async (req, res) => {
 
     const answer = await generateText(prompt);
 
+    const validation = validateGroundedAnswer(
+      answer,
+      relevantSchemes
+    );
+
+    if (!validation.valid) {
+      return res.status(502).json({
+        error: "Generated answer failed grounding validation."
+      });
+    }
+
     return res.status(200).json({
       answer,
+      grounding: {
+        valid: validation.valid,
+        reason: validation.reason,
+        mentionedSchemes: validation.mentionedSchemes
+      },
       schemes: relevantSchemes.map((scheme) => ({
         id: scheme.id,
         name: scheme.name,
@@ -114,11 +131,11 @@ router.post("/", async (req, res) => {
         official_source: scheme.official_source
       }))
     });
-  } catch (error) {
-    return res.status(500).json({
-      error: "Unable to generate a response."
+      } catch (error) {
+        return res.status(500).json({
+          error: "Unable to generate a response."
+        });
+      }
     });
-  }
-});
 
 export default router;
