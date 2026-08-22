@@ -1,0 +1,642 @@
+[
+  {
+    "id": "pm-kisan",
+    "name": "Pradhan Mantri Kisan Samman Nidhi",
+    "short_name": "PM-KISAN",
+    "category": ["Agriculture", "Farmers"],
+    "level": "Central",
+    "state": "All India",
+    "target_groups": ["Farmer", "Landholding Farmer Family"],
+    "eligibility": {
+      "summary": "Landholding farmer families having cultivable land in India, subject to the scheme's exclusion criteria.",
+      "age_min": null,
+      "age_max": null,
+      "gender": "Any",
+      "income_limit": null,
+      "important_conditions": [
+        "Applicant must belong to a landholding farmer family.",
+        "The family must hold cultivable land in India.",
+        "Institutional landholders are excluded.",
+        "Certain serving or retired government employees and public office holders are excluded.",
+        "Income-tax payers are excluded.",
+        "Certain registered professionals actively practising their profession are excluded.",
+        "Non-resident Indians are excluded."
+      ]
+    },
+    "benefits": "Income support of ₹6,000 per year, generally paid in three equal instalments through Direct Benefit Transfer.",
+    "application_process": "Registration and beneficiary services are available through the official PM-KISAN system and authorised assisted channels.",
+    "keywords": [
+      "farmer",
+      "farming",
+      "agriculture",
+      "agricultural land",
+      "cultivable land",
+      "kisan",
+      "income support"
+    ],
+    "official_source": "https://www.myscheme.gov.in/schemes/pm-kisan"
+  },
+  {
+    "id": "ab-pmjay",
+    "name": "Ayushman Bharat - Pradhan Mantri Jan Arogya Yojana",
+    "short_name": "AB PM-JAY",
+    "category": ["Health", "Health Insurance"],
+    "level": "Central",
+    "state": "All India",
+    "target_groups": [
+      "Economically Vulnerable Families",
+      "Eligible Rural Households",
+      "Eligible Urban Households"
+    ],
+    "eligibility": {
+      "summary": "Eligibility depends on applicable beneficiary criteria and differs for rural and urban households.",
+      "age_min": null,
+      "age_max": null,
+      "gender": "Any",
+      "income_limit": null,
+      "important_conditions": [
+        "Eligibility is evaluated using household and socioeconomic criteria.",
+        "Rural and urban applicants are evaluated using different applicable criteria.",
+        "Final beneficiary status should be verified through the official PM-JAY eligibility system."
+      ]
+    },
+    "benefits": "Provides eligible beneficiary families access to cashless secondary and tertiary hospitalisation services under PM-JAY, subject to current scheme rules.",
+    "application_process": "Check beneficiary eligibility through authorised PM-JAY channels and use an eligible identity or beneficiary record at an empanelled facility.",
+    "keywords": [
+      "health",
+      "hospital",
+      "hospitalisation",
+      "medical",
+      "healthcare",
+      "ayushman",
+      "poor family",
+      "cashless treatment"
+    ],
+    "official_source": "https://rules.myscheme.gov.in/check-eligibility/ab-pmjay"
+  },
+  {
+    "id": "pmmy",
+    "name": "Pradhan Mantri Mudra Yojana",
+    "short_name": "PMMY",
+    "category": ["Business", "Entrepreneurship", "Finance"],
+    "level": "Central",
+    "state": "All India",
+    "target_groups": [
+      "Micro Entrepreneur",
+      "Small Business Owner",
+      "Trader",
+      "Vendor",
+      "Service Provider"
+    ],
+    "eligibility": {
+      "summary": "Eligible applicants seeking credit for supported micro-enterprise and income-generating business activities may apply, subject to lender and scheme requirements.",
+      "age_min": null,
+      "age_max": null,
+      "gender": "Any",
+      "income_limit": null,
+      "important_conditions": [
+        "Applicant must be an Indian citizen.",
+        "Credit must be for an eligible business or income-generating activity.",
+        "Supported activities include various trading, service, micro-unit, transport and agriculture-allied activities.",
+        "Applicant should not be in default to a bank or financial institution.",
+        "Final sanction remains subject to lender requirements."
+      ]
+    },
+    "benefits": "Provides institutional credit for eligible micro and small income-generating activities under the MUDRA framework.",
+    "application_process": "Applications can be made through participating banks and other eligible lending institutions according to current PMMY procedures.",
+    "keywords": [
+      "business",
+      "loan",
+      "mudra",
+      "entrepreneur",
+      "shopkeeper",
+      "vendor",
+      "trader",
+      "micro business",
+      "small business",
+      "self employed"
+    ],
+    "official_source": "https://www.myscheme.gov.in/schemes/pradhan-mantri-mudra-yojana"
+  },
+  {
+    "id": "pmuy",
+    "name": "Pradhan Mantri Ujjwala Yojana",
+    "short_name": "PMUY",
+    "category": ["Women", "Household", "Energy"],
+    "level": "Central",
+    "state": "All India",
+    "target_groups": [
+      "Adult Women",
+      "Poor Households",
+      "Eligible Disadvantaged Households"
+    ],
+    "eligibility": {
+      "summary": "Eligible adult women from qualifying poor or disadvantaged households without an existing household LPG connection may qualify.",
+      "age_min": 18,
+      "age_max": null,
+      "gender": "Female",
+      "income_limit": null,
+      "important_conditions": [
+        "Applicant must be female.",
+        "Applicant must be above 18 years of age.",
+        "The household must not already have an LPG connection.",
+        "Applicant must satisfy the applicable poor-household or specified beneficiary-category requirements."
+      ]
+    },
+    "benefits": "Provides eligible households support for obtaining an LPG connection under the scheme, according to current PMUY benefits.",
+    "application_process": "Eligible applicants can apply through authorised LPG distributors and official PMUY channels with the required documents.",
+    "keywords": [
+      "woman",
+      "women",
+      "lpg",
+      "gas",
+      "cooking gas",
+      "ujjwala",
+      "poor household",
+      "bpl"
+    ],
+    "official_source": "https://rules.myscheme.gov.in/check-eligibility/pmuy"
+  },
+  {
+    "id": "pm-vishwakarma",
+    "name": "PM Vishwakarma",
+    "short_name": "PM Vishwakarma",
+    "category": ["Artisans", "Skill Development", "Business"],
+    "level": "Central",
+    "state": "All India",
+    "target_groups": [
+      "Artisan",
+      "Craftsperson",
+      "Traditional Worker"
+    ],
+    "eligibility": {
+      "summary": "The scheme targets artisans and craftspeople working with their hands and tools in trades recognised under PM Vishwakarma, subject to current scheme eligibility requirements.",
+      "age_min": 18,
+      "age_max": null,
+      "gender": "Any",
+      "income_limit": null,
+      "important_conditions": [
+        "Applicant must work in an eligible traditional trade covered by the scheme.",
+        "Registration and verification requirements must be satisfied.",
+        "Household and previous government credit-scheme conditions may apply under current guidelines."
+      ]
+    },
+    "benefits": "Eligible beneficiaries may receive recognition, skill-upgradation support, toolkit incentives, access to concessional credit and other support provided under PM Vishwakarma.",
+    "application_process": "Registration is carried out through the official PM Vishwakarma process, including applicable verification stages.",
+    "keywords": [
+      "artisan",
+      "craftsperson",
+      "tailor",
+      "carpenter",
+      "blacksmith",
+      "potter",
+      "traditional trade",
+      "vishwakarma",
+      "tools",
+      "skill training"
+    ],
+    "official_source": "https://www.myscheme.gov.in/"
+  },
+{
+  "id": "sukanya-samriddhi",
+  "name": "Sukanya Samriddhi Yojana",
+  "short_name": "SSY",
+  "category": ["Girl Child", "Savings", "Financial Inclusion"],
+  "level": "Central",
+  "state": "All India",
+  "target_groups": [
+    "Girl Child",
+    "Parents",
+    "Legal Guardians"
+  ],
+  "eligibility": {
+    "summary": "A parent or legal guardian may open an account for an eligible girl child, subject to the scheme's age and account-limit conditions.",
+    "age_min": 0,
+    "age_max": 10,
+    "gender": "Female",
+    "income_limit": null,
+    "important_conditions": [
+      "The account is opened in the name of a girl child.",
+      "The girl child must satisfy the applicable age condition at the time of opening.",
+      "The number of accounts allowed per family is subject to scheme rules.",
+      "Exceptions may apply in cases such as twins or triplets."
+    ]
+  },
+  "benefits": "Provides a government-backed long-term savings option for a girl child with interest and tax treatment according to current scheme rules.",
+  "application_process": "The account can be opened through eligible post offices or authorised banks with the required identity and birth-related documents.",
+  "keywords": [
+    "girl child",
+    "daughter",
+    "savings",
+    "education",
+    "marriage",
+    "sukanya",
+    "guardian",
+    "child investment"
+  ],
+  "official_source": "https://www.myscheme.gov.in/"
+},
+{
+  "id": "pmay",
+  "name": "Pradhan Mantri Awas Yojana",
+  "short_name": "PMAY",
+  "category": ["Housing", "Urban Development", "Rural Development"],
+  "level": "Central",
+  "state": "All India",
+  "target_groups": [
+    "Families Without Pucca House",
+    "Economically Weaker Households",
+    "Low Income Households"
+  ],
+  "eligibility": {
+    "summary": "Eligibility depends on the applicable PMAY component, household housing status, income category, location and current scheme guidelines.",
+    "age_min": null,
+    "age_max": null,
+    "gender": "Any",
+    "income_limit": null,
+    "important_conditions": [
+      "The household's existing housing status is an important eligibility factor.",
+      "Urban and rural components have different eligibility criteria.",
+      "Income and beneficiary-category requirements depend on the applicable component.",
+      "Final eligibility must be checked under current PMAY guidelines."
+    ]
+  },
+  "benefits": "Provides housing assistance or related financial support under applicable PMAY components, subject to current scheme rules.",
+  "application_process": "Applications are made through authorised PMAY channels, local authorities or applicable government portals depending on the component.",
+  "keywords": [
+    "house",
+    "housing",
+    "home",
+    "pucca house",
+    "awas",
+    "poor family",
+    "urban housing",
+    "rural housing"
+  ],
+  "official_source": "https://www.myscheme.gov.in/"
+},
+{
+  "id": "atal-pension-yojana",
+  "name": "Atal Pension Yojana",
+  "short_name": "APY",
+  "category": ["Pension", "Social Security", "Finance"],
+  "level": "Central",
+  "state": "All India",
+  "target_groups": [
+    "Workers",
+    "Unorganised Sector",
+    "Adult Citizens"
+  ],
+  "eligibility": {
+    "summary": "Eligible Indian citizens within the permitted joining age range and satisfying current scheme requirements may enrol in Atal Pension Yojana.",
+    "age_min": 18,
+    "age_max": 40,
+    "gender": "Any",
+    "income_limit": null,
+    "important_conditions": [
+      "Applicant must satisfy the applicable age requirement.",
+      "Applicant must have an eligible savings bank or post-office savings account.",
+      "Contribution depends on joining age and selected pension amount.",
+      "Current tax and eligibility restrictions must be checked before enrolment."
+    ]
+  },
+  "benefits": "Provides a defined pension after age 60 based on the contribution level and pension option selected under the scheme.",
+  "application_process": "Eligible applicants may enrol through participating banks or post offices according to current APY procedures.",
+  "keywords": [
+    "pension",
+    "retirement",
+    "old age",
+    "worker",
+    "unorganised sector",
+    "atal pension",
+    "monthly pension"
+  ],
+  "official_source": "https://www.myscheme.gov.in/"
+},
+{
+  "id": "pmkvy",
+  "name": "Pradhan Mantri Kaushal Vikas Yojana",
+  "short_name": "PMKVY",
+  "category": ["Skill Development", "Training", "Employment"],
+  "level": "Central",
+  "state": "All India",
+  "target_groups": [
+    "Youth",
+    "Job Seekers",
+    "Skill Learners"
+  ],
+  "eligibility": {
+    "summary": "Eligibility depends on the applicable training programme, candidate profile, course requirements and current PMKVY guidelines.",
+    "age_min": null,
+    "age_max": null,
+    "gender": "Any",
+    "income_limit": null,
+    "important_conditions": [
+      "Candidate must satisfy the requirements of the selected training programme.",
+      "Course-specific eligibility may vary.",
+      "Training centre and programme availability may differ by location.",
+      "Current PMKVY guidelines should be checked before enrolment."
+    ]
+  },
+  "benefits": "Provides eligible candidates access to skill-development and certification opportunities under approved training programmes.",
+  "application_process": "Candidates can search for eligible programmes and training centres through authorised Skill India or PMKVY channels.",
+  "keywords": [
+    "skill",
+    "training",
+    "job",
+    "employment",
+    "youth",
+    "course",
+    "certification",
+    "kaushal"
+  ],
+  "official_source": "https://www.myscheme.gov.in/"
+},
+{
+  "id": "nsp",
+  "name": "National Scholarship Portal Schemes",
+  "short_name": "NSP",
+  "category": ["Education", "Scholarship", "Students"],
+  "level": "Central",
+  "state": "All India",
+  "target_groups": [
+    "Students",
+    "Eligible Scholarship Applicants"
+  ],
+  "eligibility": {
+    "summary": "Eligibility varies by the specific scholarship available through the National Scholarship Portal and may depend on course, category, income, institution and academic criteria.",
+    "age_min": null,
+    "age_max": null,
+    "gender": "Any",
+    "income_limit": null,
+    "important_conditions": [
+      "The applicant must satisfy the requirements of the specific scholarship being applied for.",
+      "Income limits vary between scholarship schemes.",
+      "Academic and institution requirements may apply.",
+      "Application windows and document requirements differ by scheme."
+    ]
+  },
+  "benefits": "Eligible students may receive scholarship support such as tuition assistance, maintenance support or other educational benefits depending on the specific scheme.",
+  "application_process": "Students apply for eligible scholarship schemes through the National Scholarship Portal during the applicable application period.",
+  "keywords": [
+    "student",
+    "scholarship",
+    "college",
+    "school",
+    "education",
+    "fees",
+    "tuition",
+    "nsp"
+  ],
+  "official_source": "https://www.myscheme.gov.in/"
+},
+{
+  "id": "janani-suraksha-yojana",
+  "name": "Janani Suraksha Yojana",
+  "short_name": "JSY",
+  "category": ["Health", "Maternity", "Women"],
+  "level": "Central",
+  "state": "All India",
+  "target_groups": ["Pregnant Women", "Mothers"],
+  "eligibility": {
+    "summary": "Pregnant women meeting applicable institutional-delivery and beneficiary conditions may qualify under the scheme.",
+    "age_min": null,
+    "age_max": null,
+    "gender": "Female",
+    "income_limit": null,
+    "important_conditions": [
+      "Eligibility varies based on state category and applicable programme rules.",
+      "Institutional delivery is a core scheme objective.",
+      "Beneficiary conditions should be verified through the local health system."
+    ]
+  },
+  "benefits": "Provides cash assistance and related support intended to encourage institutional delivery and improve maternal and neonatal health outcomes.",
+  "application_process": "Eligible beneficiaries generally access the scheme through government health facilities, ASHA workers and local maternal-health services.",
+  "keywords": ["pregnant", "pregnancy", "maternity", "delivery", "mother", "hospital", "janani"],
+  "official_source": "https://www.myscheme.gov.in/"
+},
+{
+  "id": "pm-svanidhi",
+  "name": "PM Street Vendor's AtmaNirbhar Nidhi",
+  "short_name": "PM SVANidhi",
+  "category": ["Business", "Street Vendors", "Finance"],
+  "level": "Central",
+  "state": "All India",
+  "target_groups": ["Street Vendor", "Urban Vendor", "Hawker"],
+  "eligibility": {
+    "summary": "Eligible urban street vendors satisfying the applicable identification and vending requirements may qualify.",
+    "age_min": null,
+    "age_max": null,
+    "gender": "Any",
+    "income_limit": null,
+    "important_conditions": [
+      "Applicant must be an eligible street vendor.",
+      "Vending status or identification requirements apply.",
+      "Eligibility is subject to the current scheme guidelines and local urban-body verification."
+    ]
+  },
+  "benefits": "Provides working-capital credit support and related incentives to eligible street vendors.",
+  "application_process": "Applications can be made through authorised PM SVANidhi channels and participating lending institutions.",
+  "keywords": ["street vendor", "hawker", "vendor", "working capital", "loan", "stall", "svanidhi"],
+  "official_source": "https://www.myscheme.gov.in/"
+},
+{
+  "id": "stand-up-india",
+  "name": "Stand-Up India",
+  "short_name": "Stand-Up India",
+  "category": ["Business", "Entrepreneurship", "Finance"],
+  "level": "Central",
+  "state": "All India",
+  "target_groups": ["Women Entrepreneurs", "SC Entrepreneurs", "ST Entrepreneurs"],
+  "eligibility": {
+    "summary": "Eligible women and SC/ST entrepreneurs establishing qualifying greenfield enterprises may apply.",
+    "age_min": 18,
+    "age_max": null,
+    "gender": "Any",
+    "income_limit": null,
+    "important_conditions": [
+      "Applicant must satisfy the applicable women or SC/ST entrepreneur requirement.",
+      "The enterprise should satisfy greenfield-business conditions.",
+      "Business ownership and control requirements apply.",
+      "Final credit approval is subject to lender requirements."
+    ]
+  },
+  "benefits": "Provides bank-credit support for eligible greenfield enterprises.",
+  "application_process": "Applications are routed through participating banks and authorised Stand-Up India channels.",
+  "keywords": ["woman entrepreneur", "sc entrepreneur", "st entrepreneur", "business loan", "startup", "greenfield"],
+  "official_source": "https://www.myscheme.gov.in/"
+},
+{
+  "id": "kisan-credit-card",
+  "name": "Kisan Credit Card",
+  "short_name": "KCC",
+  "category": ["Agriculture", "Finance", "Farmers"],
+  "level": "Central",
+  "state": "All India",
+  "target_groups": ["Farmer", "Agricultural Household"],
+  "eligibility": {
+    "summary": "Eligible farmers and agricultural borrowers may access short-term credit support subject to lender and scheme conditions.",
+    "age_min": null,
+    "age_max": null,
+    "gender": "Any",
+    "income_limit": null,
+    "important_conditions": [
+      "Applicant must satisfy eligible farming or agriculture-related criteria.",
+      "Landholding or farming-activity evidence may be required.",
+      "Credit sanction remains subject to the participating financial institution."
+    ]
+  },
+  "benefits": "Provides accessible credit for agricultural and allied activities according to applicable lending rules.",
+  "application_process": "Applications are made through participating banks and authorised financial institutions.",
+  "keywords": ["farmer", "agriculture loan", "crop loan", "kisan card", "farm credit", "kcc"],
+  "official_source": "https://www.myscheme.gov.in/"
+},
+{
+  "id": "pm-fasal-bima-yojana",
+  "name": "Pradhan Mantri Fasal Bima Yojana",
+  "short_name": "PMFBY",
+  "category": ["Agriculture", "Insurance", "Farmers"],
+  "level": "Central",
+  "state": "All India",
+  "target_groups": ["Farmer", "Crop Grower"],
+  "eligibility": {
+    "summary": "Eligible farmers growing notified crops in notified areas may participate subject to current insurance and enrolment rules.",
+    "age_min": null,
+    "age_max": null,
+    "gender": "Any",
+    "income_limit": null,
+    "important_conditions": [
+      "The crop and area must satisfy the applicable notification requirements.",
+      "Enrolment must occur within the prescribed period.",
+      "Land and crop details may need verification."
+    ]
+  },
+  "benefits": "Provides crop-insurance protection against specified crop losses and risks under current scheme terms.",
+  "application_process": "Farmers can enrol through participating banks, authorised insurance channels and official PMFBY systems.",
+  "keywords": ["farmer", "crop insurance", "crop loss", "farming", "fasal", "insurance"],
+  "official_source": "https://www.myscheme.gov.in/"
+},
+{
+  "id": "nsap",
+  "name": "National Social Assistance Programme",
+  "short_name": "NSAP",
+  "category": ["Pension", "Social Welfare", "Social Security"],
+  "level": "Central",
+  "state": "All India",
+  "target_groups": ["Senior Citizens", "Widows", "Persons with Disabilities", "Poor Households"],
+  "eligibility": {
+    "summary": "Eligibility depends on the specific NSAP component and applicable socioeconomic and demographic criteria.",
+    "age_min": null,
+    "age_max": null,
+    "gender": "Any",
+    "income_limit": null,
+    "important_conditions": [
+      "Different NSAP components serve different beneficiary groups.",
+      "Age, disability, widowhood and poverty-related requirements vary by component.",
+      "Final eligibility is determined under the relevant programme."
+    ]
+  },
+  "benefits": "Provides social-assistance support through pension and related schemes for eligible vulnerable households.",
+  "application_process": "Applications are processed through applicable state or local-government welfare systems.",
+  "keywords": ["pension", "senior citizen", "widow", "disability", "poor family", "social assistance"],
+  "official_source": "https://www.myscheme.gov.in/"
+},
+{
+  "id": "ddrs",
+  "name": "Deendayal Disabled Rehabilitation Scheme",
+  "short_name": "DDRS",
+  "category": ["Disability", "Rehabilitation", "Social Welfare"],
+  "level": "Central",
+  "state": "All India",
+  "target_groups": ["Persons with Disabilities"],
+  "eligibility": {
+    "summary": "The scheme supports rehabilitation-related services for persons with disabilities through eligible implementing organisations.",
+    "age_min": null,
+    "age_max": null,
+    "gender": "Any",
+    "income_limit": null,
+    "important_conditions": [
+      "Support is delivered through eligible organisations and approved projects.",
+      "Beneficiary access depends on the available rehabilitation services and programme conditions."
+    ]
+  },
+  "benefits": "Supports rehabilitation, education, training and related services for persons with disabilities through approved projects.",
+  "application_process": "Beneficiaries generally access services through organisations implementing approved rehabilitation programmes.",
+  "keywords": ["disability", "disabled", "rehabilitation", "special needs", "training", "support"],
+  "official_source": "https://www.myscheme.gov.in/"
+},
+{
+  "id": "beti-bachao-beti-padhao",
+  "name": "Beti Bachao Beti Padhao",
+  "short_name": "BBBP",
+  "category": ["Women", "Girl Child", "Education", "Social Welfare"],
+  "level": "Central",
+  "state": "All India",
+  "target_groups": ["Girl Child", "Families", "Communities"],
+  "eligibility": {
+    "summary": "This is primarily an awareness and social-development programme rather than a direct universal cash-benefit scheme.",
+    "age_min": null,
+    "age_max": null,
+    "gender": "Female",
+    "income_limit": null,
+    "important_conditions": [
+      "The programme focuses on improving outcomes for girls.",
+      "It should not be represented as a guaranteed direct-cash benefit to every family."
+    ]
+  },
+  "benefits": "Promotes the survival, protection, education and empowerment of girls through coordinated government interventions.",
+  "application_process": "Participation and services vary across programme activities and local implementation.",
+  "keywords": ["girl child", "daughter", "education", "women empowerment", "beti bachao", "beti padhao"],
+  "official_source": "https://www.myscheme.gov.in/"
+},
+{
+  "id": "pmmvy",
+  "name": "Pradhan Mantri Matru Vandana Yojana",
+  "short_name": "PMMVY",
+  "category": ["Maternity", "Women", "Health"],
+  "level": "Central",
+  "state": "All India",
+  "target_groups": ["Pregnant Women", "Lactating Mothers"],
+  "eligibility": {
+    "summary": "Eligible pregnant women and lactating mothers satisfying current maternity-benefit conditions may qualify.",
+    "age_min": null,
+    "age_max": null,
+    "gender": "Female",
+    "income_limit": null,
+    "important_conditions": [
+      "Pregnancy and maternity conditions apply.",
+      "Benefit eligibility depends on the current programme rules and beneficiary category.",
+      "Required maternal-health registration and documents may apply."
+    ]
+  },
+  "benefits": "Provides maternity-related financial support to eligible beneficiaries under current scheme rules.",
+  "application_process": "Applications are typically processed through authorised maternal-health, Anganwadi or government systems.",
+  "keywords": ["pregnant", "pregnancy", "mother", "maternity", "lactating", "matru vandana"],
+  "official_source": "https://www.myscheme.gov.in/"
+},
+{
+  "id": "e-shram",
+  "name": "e-Shram",
+  "short_name": "e-Shram",
+  "category": ["Workers", "Unorganised Sector", "Social Security"],
+  "level": "Central",
+  "state": "All India",
+  "target_groups": ["Unorganised Workers"],
+  "eligibility": {
+    "summary": "Eligible unorganised workers may register on the e-Shram platform subject to current registration requirements.",
+    "age_min": null,
+    "age_max": null,
+    "gender": "Any",
+    "income_limit": null,
+    "important_conditions": [
+      "Applicant should fall within an eligible unorganised-worker category.",
+      "Current registration and identity requirements apply.",
+      "Registration itself should not be described as an automatic guarantee of every welfare benefit."
+    ]
+  },
+  "benefits": "Provides a national worker-registration platform intended to support access to social-security and welfare initiatives.",
+  "application_process": "Eligible workers can register through the official e-Shram system and authorised assisted channels.",
+  "keywords": ["worker", "labour", "unorganised", "construction worker", "gig worker", "migrant worker", "e shram"],
+  "official_source": "https://www.myscheme.gov.in/"
+}
+]
