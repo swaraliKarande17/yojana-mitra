@@ -5,6 +5,7 @@ import cors from "cors";
 
 import schemeRoutes from "./routes/schemeRoutes.js";
 import searchRoutes from "./routes/searchRoutes.js";
+import chatRoutes from "./routes/chatRoutes.js";
 
 const app = express();
 
@@ -20,5 +21,6 @@ app.get("/health", (req, res) => {
 
 app.use("/api/schemes", schemeRoutes);
 app.use("/api/search", searchRoutes);
+app.use("/api/chat", chatRoutes);
 
 export default app;
