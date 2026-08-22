@@ -49,3 +49,41 @@ export function validateGroundedAnswer(answer, retrievedSchemes) {
     mentionedSchemes
   };
 }
+
+export function validateRecommendedSchemeIds(
+  recommendedSchemeIds,
+  retrievedSchemes
+) {
+  if (!Array.isArray(recommendedSchemeIds)) {
+    return {
+      valid: false,
+      reason: "Recommended scheme IDs must be an array.",
+      invalidSchemeIds: []
+    };
+  }
+
+  if (!Array.isArray(retrievedSchemes)) {
+    return {
+      valid: false,
+      reason: "Retrieved scheme context is invalid.",
+      invalidSchemeIds: []
+    };
+  }
+
+  const allowedIds = new Set(
+    retrievedSchemes.map((scheme) => scheme.id)
+  );
+
+  const invalidSchemeIds = recommendedSchemeIds.filter(
+    (id) => !allowedIds.has(id)
+  );
+
+  return {
+    valid: invalidSchemeIds.length === 0,
+    reason:
+      invalidSchemeIds.length === 0
+        ? "All recommended scheme IDs are grounded in retrieved context."
+        : "One or more recommended scheme IDs were not retrieved.",
+    invalidSchemeIds
+  };
+}

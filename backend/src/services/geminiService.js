@@ -38,3 +38,39 @@ export async function generateText(prompt) {
     throw new Error(`Gemini request failed: ${error.message}`);
   }
 }
+
+export async function generateStructuredResponse(prompt) {
+  if (!prompt || typeof prompt !== "string" || !prompt.trim()) {
+    throw new Error("A valid prompt is required.");
+  }
+
+  try {
+    const ai = getGeminiClient();
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3.6-flash",
+      contents: prompt.trim(),
+      config: {
+        responseMimeType: "application/json"
+      }
+    });
+
+    const text = response.text?.trim();
+
+    if (!text) {
+      throw new Error("Gemini returned an empty response.");
+    }
+
+    let parsedResponse;
+
+    try {
+      parsedResponse = JSON.parse(text);
+    } catch {
+      throw new Error("Gemini returned invalid JSON.");
+    }
+
+    return parsedResponse;
+  } catch (error) {
+    throw new Error(`Gemini request failed: ${error.message}`);
+  }
+}
