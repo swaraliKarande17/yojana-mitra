@@ -1,13 +1,161 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="Yojana Mitra - a grounded AI assistant for discovering relevant Indian government schemes."
+  />
+  <title>Yojana Mitra</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+  <div class="page-glow page-glow-one"></div>
+  <div class="page-glow page-glow-two"></div>
+
+  <main class="app-shell">
+    <section class="hero-panel">
+      <div class="brand-block">
+        <div class="brand-icon">YM</div>
+
+        <div>
+          <p class="eyebrow">Government Scheme Discovery</p>
+          <h1>Yojana Mitra</h1>
+          <p class="hero-copy">
+            Discover relevant government schemes through grounded AI, transparent
+            recommendations, and official-source references.
+          </p>
+        </div>
+      </div>
+
+      <div class="hero-meta">
+        <div class="trust-pill">
+          <span class="status-dot"></span>
+          Grounded AI
+        </div>
+
+        <div class="trust-pill secondary">
+          Official-source links
+        </div>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <aside class="info-panel">
+        <div class="info-card highlight-card">
+          <p class="eyebrow light">How to ask</p>
+          <h2>Tell us about your situation</h2>
+          <p>
+            Include details like occupation, age, state, income range, gender,
+            category, or the type of assistance you need.
+          </p>
+        </div>
+
+        <div class="info-card">
+          <p class="eyebrow">Example questions</p>
+
+          <button class="prompt-chip" data-prompt="I am a farmer and need crop insurance">
+            Farmer needing crop insurance
+          </button>
+
+          <button class="prompt-chip" data-prompt="I am pregnant and need maternity support">
+            Maternity support
+          </button>
+
+          <button class="prompt-chip" data-prompt="I am a street vendor and need a business loan">
+            Street vendor business loan
+          </button>
+
+          <button class="prompt-chip" data-prompt="I am a student looking for scholarship support">
+            Student scholarship
+          </button>
+        </div>
+
+        <div class="info-card">
+          <p class="eyebrow">Trust & safety</p>
+
+          <div class="trust-row">
+            <span>01</span>
+            <p>Recommendations are checked against retrieved scheme IDs.</p>
+          </div>
+
+          <div class="trust-row">
+            <span>02</span>
+            <p>Final eligibility should always be confirmed on official portals.</p>
+          </div>
+
+          <div class="trust-row">
+            <span>03</span>
+            <p>The assistant does not treat retrieval scores as eligibility percentages.</p>
+          </div>
+        </div>
+      </aside>
+
+      <section class="chat-card">
+        <header class="chat-header">
+          <div>
+            <p class="eyebrow">AI Scheme Assistant</p>
+            <h2>Ask Yojana Mitra</h2>
+          </div>
+
+          <div class="online-badge">
+            <span class="status-dot"></span>
+            Ready
+          </div>
+        </header>
+
+        <div id="messagesArea" class="messages-area" aria-live="polite"></div>
+
+        <section
+          id="recommendedSection"
+          class="recommended-section hidden"
+          aria-label="Recommended schemes"
+        >
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Grounded recommendations</p>
+              <h3>Relevant schemes</h3>
+            </div>
+
+            <span class="verified-label">Validated</span>
+          </div>
+
+          <div id="schemeGrid" class="scheme-grid"></div>
+        </section>
+
+        <form id="chatForm" class="composer">
+          <div class="composer-field">
+            <textarea
+              id="messageInput"
+              rows="3"
+              maxlength="2000"
+              autocomplete="off"
+              placeholder="Describe your situation, for example: I am a farmer in Maharashtra and need crop insurance..."
+              required
+            ></textarea>
+
+            <div class="composer-hint">
+              Press Enter to send · Shift + Enter for a new line
+            </div>
+          </div>
+
+          <button id="submitButton" type="submit">
+            <span>Ask Yojana Mitra</span>
+            <span class="button-arrow">→</span>
+          </button>
+        </form>
+
+        <footer class="disclaimer">
+          Yojana Mitra helps discover relevant schemes. Always verify final
+          eligibility, deadlines, and current conditions through official
+          government sources.
+        </footer>
+      </section>
+    </section>
+  </main>
+
+  <script src="./app.js" defer></script>
+</body>
 </html>
