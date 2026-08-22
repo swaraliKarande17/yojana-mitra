@@ -2,6 +2,7 @@
 
 import express from "express";
 import cors from "cors";
+import schemeRoutes from "./routes/schemeRoutes.js";
 
 const app = express();
 
@@ -14,5 +15,7 @@ app.get("/health", (req, res) => {
     service: "Yojana Mitra API"
   });
 });
+
+app.use("/api/schemes", schemeRoutes);
 
 export default app;
