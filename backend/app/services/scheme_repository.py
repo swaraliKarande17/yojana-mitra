@@ -2,46 +2,251 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from threading import RLock
 from typing import Any
+
+from app.db.scheme_store import scheme_store
 
 
 class SchemeRepository:
-    """Loads scheme data safely and reuses it until the file changes."""
+    """
+    Central read layer for Yojana Mitra.
 
-    def __init__(self, path: Path | None = None) -> None:
-        self._path = path or Path(__file__).resolve().parents[1] / "data" / "schemes.json"
-        self._lock = RLock()
-        self._cached_mtime_ns: int | None = None
-        self._cached_schemes: list[dict[str, Any]] = []
+    Priority:
+    1. SQLite official scheme store
+    2. Official JSON cache
+    3. Legacy schemes.json fallback
+    """
 
-    def load_all(self) -> list[dict[str, Any]]:
-        try:
-            mtime_ns = self._path.stat().st_mtime_ns
-        except OSError as exc:
-            raise RuntimeError("Scheme data file is unavailable.") from exc
-
-        with self._lock:
-            if self._cached_mtime_ns == mtime_ns and self._cached_schemes:
-                return [dict(item) for item in self._cached_schemes]
-
-            try:
-                payload = json.loads(self._path.read_text(encoding="utf-8"))
-            except (OSError, json.JSONDecodeError) as exc:
-                raise RuntimeError("Unable to load scheme data.") from exc
-
-            if not isinstance(payload, list):
-                raise RuntimeError("Scheme data must be a JSON array.")
-
-            self._cached_schemes = payload
-            self._cached_mtime_ns = mtime_ns
-            return [dict(item) for item in payload]
-
-    def get_by_id(self, scheme_id: str) -> dict[str, Any] | None:
-        return next(
-            (scheme for scheme in self.load_all() if scheme.get("id") == scheme_id),
-            None,
+    def __init__(self) -> None:
+        data_dir = (
+            Path(__file__).resolve().parent.parent
+            / "data"
         )
+
+        self.official_cache_path = (
+            data_dir
+            / "official_scheme_cache.json"
+        )
+
+        self.fallback_path = (
+            data_dir
+            / "schemes.json"
+        )
+
+    @staticmethod
+    def _read_json(
+        path: Path,
+    ) -> Any:
+        if not path.exists():
+            return None
+
+        try:
+            return json.loads(
+                path.read_text(
+                    encoding="utf-8"
+                )
+            )
+
+        except (
+            json.JSONDecodeError,
+            OSError,
+        ):
+            return None
+
+    def _load_from_sqlite(
+        self,
+    ) -> list[dict]:
+        try:
+            schemes = scheme_store.get_all()
+
+            if not isinstance(
+                schemes,
+                list,
+            ):
+                return []
+
+            return [
+                self._ensure_legacy_fields(
+                    scheme
+                )
+                for scheme in schemes
+            ]
+
+        except Exception as exc:
+            print(
+                "[SCHEME REPOSITORY] "
+                f"SQLite unavailable: {exc}"
+            )
+
+            return []
+
+    def _load_official_cache(
+        self,
+    ) -> list[dict]:
+        payload = self._read_json(
+            self.official_cache_path
+        )
+
+        if not isinstance(
+            payload,
+            dict,
+        ):
+            return []
+
+        schemes = payload.get(
+            "schemes",
+            [],
+        )
+
+        if not isinstance(
+            schemes,
+            list,
+        ):
+            return []
+
+        return [
+            self._ensure_legacy_fields(
+                scheme
+            )
+            for scheme in schemes
+        ]
+
+    def _load_fallback(
+        self,
+    ) -> list[dict]:
+        payload = self._read_json(
+            self.fallback_path
+        )
+
+        if not isinstance(
+            payload,
+            list,
+        ):
+            return []
+
+        return [
+            self._ensure_legacy_fields(
+                scheme
+            )
+            for scheme in payload
+        ]
+
+    def load_all(
+        self,
+    ) -> list[dict]:
+        sqlite_schemes = (
+            self._load_from_sqlite()
+        )
+
+        if sqlite_schemes:
+            return sqlite_schemes
+
+        official_schemes = (
+            self._load_official_cache()
+        )
+
+        if official_schemes:
+            return official_schemes
+
+        return self._load_fallback()
+
+    def get_all(
+        self,
+    ) -> list[dict]:
+        return self.load_all()
+
+    def get_by_id(
+        self,
+        scheme_id: str,
+    ) -> dict | None:
+        normalized_id = (
+            scheme_id
+            .strip()
+            .lower()
+        )
+
+        for scheme in self.load_all():
+            current_id = str(
+                scheme.get(
+                    "id",
+                    "",
+                )
+            ).lower()
+
+            if current_id == normalized_id:
+                return scheme
+
+        return None
+
+    @staticmethod
+    def _ensure_legacy_fields(
+        scheme: dict,
+    ) -> dict:
+        """
+        Keep compatibility with retrieval/chat code
+        while storage is being migrated to SQLite.
+        """
+
+        result = dict(scheme)
+
+        source = result.get(
+            "source",
+            {},
+        )
+
+        if not isinstance(
+            source,
+            dict,
+        ):
+            source = {}
+
+        if not result.get(
+            "official_source"
+        ):
+            result["official_source"] = (
+                result.get(
+                    "official_scheme_url"
+                )
+                or source.get("url")
+                or ""
+            )
+
+        result.setdefault(
+            "category",
+            [],
+        )
+
+        result.setdefault(
+            "target_groups",
+            [],
+        )
+
+        result.setdefault(
+            "eligibility",
+            {},
+        )
+
+        result.setdefault(
+            "benefits",
+            "",
+        )
+
+        result.setdefault(
+            "documents",
+            [],
+        )
+
+        result.setdefault(
+            "application_process",
+            "",
+        )
+
+        result.setdefault(
+            "keywords",
+            [],
+        )
+
+        return result
 
 
 scheme_repository = SchemeRepository()

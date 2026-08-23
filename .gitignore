@@ -23,3 +23,9 @@ backend/.env
 
 # Node dependencies
 node_modules/
+
+# Runtime database/cache
+backend/app/data/*.db
+backend/app/data/*.db-shm
+backend/app/data/*.db-wal
+
