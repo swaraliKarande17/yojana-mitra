@@ -5,17 +5,6 @@ from typing import Any
 
 
 class OfficialContentExtractionService:
-    """
-    Extract common scheme sections from normalized
-    official-government page text.
-
-    Important:
-    Only strong/clear section headings are recognised.
-    We intentionally avoid broad aliases such as
-    'assistance' or 'apply' because those words can
-    occur naturally inside scheme descriptions.
-    """
-
     SECTION_ALIASES = {
         "eligibility": {
             "eligibility",
@@ -24,6 +13,7 @@ class OfficialContentExtractionService:
             "who is eligible",
             "eligible beneficiaries",
             "beneficiary eligibility",
+            "target beneficiaries",
         },
 
         "benefits": {
@@ -31,6 +21,7 @@ class OfficialContentExtractionService:
             "scheme benefits",
             "benefits of the scheme",
             "key benefits",
+            "financial benefits",
         },
 
         "application_process": {
@@ -39,6 +30,7 @@ class OfficialContentExtractionService:
             "application procedure",
             "application process and procedure",
             "how to apply for the scheme",
+            "registration process",
         },
 
         "documents": {
@@ -46,7 +38,35 @@ class OfficialContentExtractionService:
             "required documents",
             "documents needed",
             "documents required for application",
+            "supporting documents",
         },
+    }
+
+    INLINE_PATTERNS = {
+        "eligibility": [
+            r"eligibility\s*[:\-]\s*(.+)",
+            r"eligible beneficiaries\s*[:\-]\s*(.+)",
+            r"who can apply\s*[:\-]\s*(.+)",
+        ],
+
+        "benefits": [
+            r"benefits?\s*[:\-]\s*(.+)",
+            r"financial assistance\s*[:\-]\s*(.+)",
+            r"assistance provided\s*[:\-]\s*(.+)",
+        ],
+
+        "application_process": [
+            r"how to apply\s*[:\-]\s*(.+)",
+            r"application process\s*[:\-]\s*(.+)",
+            r"application procedure\s*[:\-]\s*(.+)",
+            r"registration process\s*[:\-]\s*(.+)",
+        ],
+
+        "documents": [
+            r"documents required\s*[:\-]\s*(.+)",
+            r"required documents\s*[:\-]\s*(.+)",
+            r"supporting documents\s*[:\-]\s*(.+)",
+        ],
     }
 
     def extract(
@@ -62,7 +82,7 @@ class OfficialContentExtractionService:
             cleaned_text
         )
 
-        return {
+        result = {
             "eligibility": sections.get(
                 "eligibility",
                 "",
@@ -84,6 +104,18 @@ class OfficialContentExtractionService:
             ).strip(),
         }
 
+        # Fallback:
+        # some government sites put labels inline
+        # instead of using proper headings.
+        for key in result:
+            if not result[key]:
+                result[key] = self._extract_inline(
+                    cleaned_text,
+                    key,
+                )
+
+        return result
+
     @staticmethod
     def _clean_text(
         text: str,
@@ -100,9 +132,6 @@ class OfficialContentExtractionService:
             "\n",
         )
 
-        # Remove extra horizontal whitespace,
-        # but preserve newlines because headings
-        # generally appear on separate lines.
         value = re.sub(
             r"[ \t]+",
             " ",
@@ -133,7 +162,10 @@ class OfficialContentExtractionService:
             if line.strip()
         ]
 
-        collected: dict[str, list[str]] = {
+        collected: dict[
+            str,
+            list[str]
+        ] = {
             "eligibility": [],
             "benefits": [],
             "application_process": [],
@@ -152,9 +184,9 @@ class OfficialContentExtractionService:
                 continue
 
             if current_section is not None:
-                collected[current_section].append(
-                    line
-                )
+                collected[
+                    current_section
+                ].append(line)
 
         return {
             section: self._join_content(lines)
@@ -166,17 +198,6 @@ class OfficialContentExtractionService:
         self,
         line: str,
     ) -> str | None:
-        """
-        Returns a known section only when the entire
-        line looks like a strong section heading.
-
-        This avoids confusing content such as:
-
-            "financial assistance"
-
-        with the Benefits heading.
-        """
-
         normalized = self._normalize_heading(
             line
         )
@@ -184,10 +205,9 @@ class OfficialContentExtractionService:
         if not normalized:
             return None
 
-        # Real section headings should be reasonably
-        # short. This also prevents full sentences
-        # from being classified as headings.
-        if len(normalized) > 60:
+        # Headings should be short enough
+        # not to accidentally classify paragraphs.
+        if len(normalized) > 80:
             return None
 
         for section, aliases in (
@@ -198,13 +218,42 @@ class OfficialContentExtractionService:
 
         return None
 
+    def _extract_inline(
+        self,
+        text: str,
+        section_name: str,
+    ) -> str:
+        patterns = self.INLINE_PATTERNS.get(
+            section_name,
+            [],
+        )
+
+        for pattern in patterns:
+            match = re.search(
+                pattern,
+                text,
+                flags=re.IGNORECASE,
+            )
+
+            if not match:
+                continue
+
+            value = match.group(1).strip()
+
+            # Avoid returning enormous chunks.
+            if len(value) > 800:
+                value = value[:800].strip()
+
+            return value
+
+        return ""
+
     @staticmethod
     def _normalize_heading(
         value: str,
     ) -> str:
         value = str(value).lower().strip()
 
-        # Remove common heading punctuation.
         value = re.sub(
             r"[:\-–—]+$",
             "",

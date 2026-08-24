@@ -15,7 +15,9 @@ from app.sources.html_discovery_source import (
 from app.sources.html_scheme_source import (
     HTMLSchemeSource,
 )
-
+from app.services.scheme_validation_service import (
+    scheme_validation_service,
+)
 
 @dataclass(frozen=True)
 class DiscoveryIngestionResult:
@@ -92,12 +94,31 @@ class DiscoveryIngestionService:
                     if not schemes:
                         return False
 
+                    stored_any = False
+
                     for scheme in schemes:
+                        validation = (
+                            scheme_validation_service.validate(
+                                scheme
+                            )
+                        )
+
+                        if not validation.valid:
+                            print(
+                                "[DISCOVERY INGESTION] "
+                                f"Rejected {link.url}: "
+                                f"{validation.reason}"
+                            )
+
+                            continue
+
                         self.store.upsert(
                             scheme
                         )
 
-                    return True
+                        stored_any = True
+
+                    return stored_any
 
                 except Exception as exc:
                     print(

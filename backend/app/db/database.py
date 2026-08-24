@@ -37,6 +37,11 @@ def get_connection() -> sqlite3.Connection:
 
 def initialize_database() -> None:
     with get_connection() as connection:
+
+        # -------------------------
+        # Schemes
+        # -------------------------
+
         connection.execute(
             """
             CREATE TABLE IF NOT EXISTS schemes (
@@ -97,5 +102,38 @@ def initialize_database() -> None:
             CREATE INDEX IF NOT EXISTS
             idx_schemes_ministry
             ON schemes(ministry);
+            """
+        )
+
+        # -------------------------
+        # Government portals
+        # -------------------------
+
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS government_portals (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+                name TEXT NOT NULL,
+                url TEXT NOT NULL UNIQUE,
+                domain TEXT NOT NULL,
+                category TEXT,
+
+                source_name TEXT,
+                source_url TEXT,
+
+                discovered_at TEXT NOT NULL,
+                last_seen_at TEXT NOT NULL,
+
+                is_active INTEGER NOT NULL DEFAULT 1
+            );
+            """
+        )
+
+        connection.execute(
+            """
+            CREATE INDEX IF NOT EXISTS
+            idx_government_portals_domain
+            ON government_portals(domain);
             """
         )

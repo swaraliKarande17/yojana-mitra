@@ -3,30 +3,24 @@ from app.services.official_content_extraction_service import (
 )
 
 
-def test_extracts_official_sections():
+def test_extracts_inline_sections():
     service = OfficialContentExtractionService()
 
     text = """
-    Pradhan Mantri Example Scheme
+    Farmer Support Scheme
 
-    Eligibility
-    Applicant must be an Indian citizen.
-    Applicant must be at least 18 years old.
+    Eligibility: Eligible farmers with valid land records may apply.
 
-    Benefits
-    Eligible applicants receive financial support.
+    Benefits: Financial assistance is provided to eligible farmers.
 
-    How to Apply
-    Applications can be submitted through the official portal.
+    How to Apply: Applications can be submitted through the official portal.
 
-    Documents Required
-    Aadhaar Card
-    Bank account details
+    Documents Required: Aadhaar Card and bank account details.
     """
 
     result = service.extract(text)
 
-    assert "Indian citizen" in result["eligibility"]
-    assert "financial support" in result["benefits"]
+    assert "Eligible farmers" in result["eligibility"]
+    assert "Financial assistance" in result["benefits"]
     assert "official portal" in result["application_process"]
     assert "Aadhaar Card" in result["documents"]

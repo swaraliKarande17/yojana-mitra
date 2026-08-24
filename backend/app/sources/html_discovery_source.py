@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin, urlparse, urldefrag
 
 import httpx
 from bs4 import BeautifulSoup
@@ -19,9 +19,96 @@ class HTMLDiscoverySource:
     Generic discovery adapter for permitted official
     government scheme listing/index pages.
 
-    It discovers candidate scheme links but does not
-    fetch or normalize scheme details.
+    It discovers only strong scheme/programme candidates.
+    It does not fetch or normalize scheme details.
     """
+
+    SCHEME_KEYWORDS = {
+        "scheme",
+        "schemes",
+        "yojana",
+        "programme",
+        "programmes",
+        "program",
+        "programs",
+        "mission",
+        "subsidy",
+        "assistance",
+        "benefit",
+        "benefits",
+        "welfare",
+        "scholarship",
+        "pension",
+        "insurance",
+        "financial support",
+        "financial assistance",
+    }
+
+    BLOCKED_KEYWORDS = {
+        "about",
+        "contact",
+        "minister",
+        "ministers",
+        "directory",
+        "history",
+        "tender",
+        "recruitment",
+        "vacancy",
+        "gallery",
+        "video",
+        "videos",
+        "news",
+        "press",
+        "publication",
+        "statistics",
+        "statistical",
+        "report",
+        "reports",
+        "annual",
+        "budget",
+        "parliament",
+        "download",
+        "downloads",
+        "sitemap",
+        "site_map",
+        "screenreader",
+        "screen-reader",
+        "feedback",
+        "disclaimer",
+        "privacy",
+        "login",
+        "signin",
+        "sign-in",
+        "result",
+        "results",
+        "acts",
+        "presentation",
+        "weather",
+        "archive",
+        "archives",
+        "magazine",
+        "conference",
+        "circular",
+        "forms",
+        "form",
+    }
+
+    BLOCKED_EXTENSIONS = {
+        ".pdf",
+        ".jpg",
+        ".jpeg",
+        ".png",
+        ".gif",
+        ".webp",
+        ".zip",
+        ".rar",
+        ".doc",
+        ".docx",
+        ".xls",
+        ".xlsx",
+        ".ppt",
+        ".pptx",
+    }
 
     def __init__(
         self,
@@ -30,8 +117,11 @@ class HTMLDiscoverySource:
         allowed_domains: set[str],
         allowed_path_prefixes: tuple[str, ...] = (),
         timeout_seconds: float = 20.0,
+        max_results: int = 25,
     ) -> None:
-        self.listing_url = listing_url.strip()
+        self.listing_url = self._normalize_https_url(
+            listing_url.strip()
+        )
 
         self.allowed_domains = {
             domain.lower().strip()
@@ -39,11 +129,14 @@ class HTMLDiscoverySource:
             if domain.strip()
         }
 
-        self.allowed_path_prefixes = (
-            allowed_path_prefixes
-        )
+        self.allowed_path_prefixes = allowed_path_prefixes
 
         self.timeout_seconds = timeout_seconds
+
+        self.max_results = max(
+            1,
+            min(max_results, 100),
+        )
 
         self._validate_config()
 
@@ -62,9 +155,8 @@ class HTMLDiscoverySource:
                 "Invalid discovery URL."
             )
 
-        if (
+        if not self._is_allowed_domain(
             parsed.netloc.lower()
-            not in self.allowed_domains
         ):
             raise ValueError(
                 "Listing domain is not trusted."
@@ -120,7 +212,7 @@ class HTMLDiscoverySource:
         ):
             href = anchor.get(
                 "href",
-                ""
+                "",
             ).strip()
 
             name = anchor.get_text(
@@ -136,8 +228,18 @@ class HTMLDiscoverySource:
                 href,
             )
 
+            absolute_url = self._normalize_https_url(
+                absolute_url
+            )
+
             if not self._is_allowed_url(
                 absolute_url
+            ):
+                continue
+
+            if not self._is_scheme_candidate(
+                url=absolute_url,
+                text=name,
             ):
                 continue
 
@@ -152,8 +254,48 @@ class HTMLDiscoverySource:
                 ),
             )
 
+            if (
+                len(discovered)
+                >= self.max_results
+            ):
+                break
+
         return list(
             discovered.values()
+        )
+
+    def _is_scheme_candidate(
+        self,
+        *,
+        url: str,
+        text: str,
+    ) -> bool:
+        parsed = urlparse(url)
+
+        path = parsed.path.lower()
+
+        if any(
+            path.endswith(extension)
+            for extension in self.BLOCKED_EXTENSIONS
+        ):
+            return False
+
+        searchable = (
+            f"{text} {parsed.path}"
+            .lower()
+            .replace("_", " ")
+            .replace("-", " ")
+        )
+
+        if any(
+            keyword in searchable
+            for keyword in self.BLOCKED_KEYWORDS
+        ):
+            return False
+
+        return any(
+            keyword in searchable
+            for keyword in self.SCHEME_KEYWORDS
         )
 
     def _is_allowed_url(
@@ -165,9 +307,11 @@ class HTMLDiscoverySource:
         if parsed.scheme != "https":
             return False
 
-        if (
+        if not parsed.netloc:
+            return False
+
+        if not self._is_allowed_domain(
             parsed.netloc.lower()
-            not in self.allowed_domains
         ):
             return False
 
@@ -176,6 +320,38 @@ class HTMLDiscoverySource:
 
         return any(
             parsed.path.startswith(prefix)
-            for prefix
-            in self.allowed_path_prefixes
+            for prefix in self.allowed_path_prefixes
         )
+
+    def _is_allowed_domain(
+        self,
+        candidate_domain: str,
+    ) -> bool:
+        candidate_domain = (
+            candidate_domain
+            .lower()
+            .strip()
+        )
+
+        return any(
+            candidate_domain == allowed
+            or candidate_domain.endswith(
+                f".{allowed}"
+            )
+            for allowed in self.allowed_domains
+        )
+
+    @staticmethod
+    def _normalize_https_url(
+        url: str,
+    ) -> str:
+        parsed = urlparse(
+            url.strip()
+        )
+
+        if parsed.scheme == "http":
+            return parsed._replace(
+                scheme="https"
+            ).geturl()
+
+        return url.strip()
