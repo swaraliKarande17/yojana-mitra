@@ -38,9 +38,9 @@ class PortalSchemeIngestionService:
     def __init__(
         self,
         *,
-        max_portals: int = 5,
-        listing_limit_per_portal: int = 3,
-        concurrency: int = 2,
+        max_portals: int = 20,
+        listing_limit_per_portal: int = 5,
+        concurrency: int = 4,
     ) -> None:
         self.max_portals = max(1, max_portals)
         self.listing_limit_per_portal = max(

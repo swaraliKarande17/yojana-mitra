@@ -138,3 +138,16 @@ def test_rejects_scheme_page_without_extracted_details():
         result.reason
         == "No usable scheme details were extracted."
     )
+
+def test_rejects_generic_scheme_name():
+    service = SchemeValidationService()
+
+    scheme = make_valid_scheme()
+
+    scheme["name"] = "English"
+
+    result = service.validate(
+        scheme
+    )
+
+    assert result.valid is False

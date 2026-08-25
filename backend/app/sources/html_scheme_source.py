@@ -7,6 +7,9 @@ from urllib.parse import urlparse
 import httpx
 from bs4 import BeautifulSoup
 
+from app.services.html_structure_extraction_service import (
+    html_structure_extractor,
+)
 from app.services.official_content_extraction_service import (
     official_content_extractor,
 )
@@ -16,8 +19,6 @@ from app.sources.base_source import GovernmentSource
 class HTMLSchemeSource(GovernmentSource):
     """
     Generic adapter for official government scheme webpages.
-
-    This class contains no scheme-specific logic.
     """
 
     def __init__(
@@ -35,6 +36,7 @@ class HTMLSchemeSource(GovernmentSource):
     ) -> None:
         self.scheme_id = scheme_id.strip()
         self.scheme_name = scheme_name.strip()
+
         self.short_name = (
             short_name.strip()
             if short_name
@@ -74,6 +76,74 @@ class HTMLSchemeSource(GovernmentSource):
                 "Invalid official source URL."
             )
 
+    @staticmethod
+    def _extract_page_title(
+        soup: BeautifulSoup,
+        fallback: str,
+    ) -> str:
+        """
+        Extract the actual scheme/page name.
+
+        Priority:
+        1. h1
+        2. og:title
+        3. title tag
+        4. discovered-link fallback
+        """
+
+        h1 = soup.find("h1")
+
+        if h1:
+            value = h1.get_text(
+                " ",
+                strip=True,
+            )
+
+            if value:
+                return value
+
+        og_title = soup.find(
+            "meta",
+            attrs={
+                "property": "og:title",
+            },
+        )
+
+        if og_title:
+            value = str(
+                og_title.get(
+                    "content",
+                    "",
+                )
+            ).strip()
+
+            if value:
+                return value
+
+        title_tag = soup.find("title")
+
+        if title_tag:
+            value = title_tag.get_text(
+                " ",
+                strip=True,
+            )
+
+            if value:
+                for separator in (
+                    " | ",
+                    " :: ",
+                ):
+                    if separator in value:
+                        value = value.split(
+                            separator,
+                            1,
+                        )[0].strip()
+
+                if value:
+                    return value
+
+        return fallback.strip()
+
     async def fetch_schemes(
         self,
     ) -> list[dict[str, Any]]:
@@ -102,7 +172,7 @@ class HTMLSchemeSource(GovernmentSource):
 
         content_type = response.headers.get(
             "content-type",
-            ""
+            "",
         ).lower()
 
         if (
@@ -127,7 +197,18 @@ class HTMLSchemeSource(GovernmentSource):
         raw_item: dict[str, Any],
     ) -> dict[str, Any]:
         html = str(
-            raw_item.get("html", "")
+            raw_item.get(
+                "html",
+                "",
+            )
+        )
+
+        # First extract structured data directly
+        # from the original HTML.
+        structured_html = (
+            html_structure_extractor.extract(
+                html
+            )
         )
 
         soup = BeautifulSoup(
@@ -135,7 +216,12 @@ class HTMLSchemeSource(GovernmentSource):
             "html.parser",
         )
 
-        # Remove content that has no scheme meaning.
+        page_name = self._extract_page_title(
+            soup,
+            self.scheme_name,
+        )
+
+        # Remove non-content elements.
         for element in soup(
             [
                 "script",
@@ -150,37 +236,83 @@ class HTMLSchemeSource(GovernmentSource):
             strip=True,
         )
 
-        structured = (
+        # Then extract information from flattened text.
+        structured_text = (
             official_content_extractor.extract(
                 official_text
             )
         )
 
+        eligibility_text = (
+            structured_html.get(
+                "eligibility",
+                "",
+            ).strip()
+            or structured_text.get(
+                "eligibility",
+                "",
+            ).strip()
+        )
+
+        benefits_text = (
+            structured_html.get(
+                "benefits",
+                "",
+            ).strip()
+            or structured_text.get(
+                "benefits",
+                "",
+            ).strip()
+        )
+
+        application_text = (
+            structured_html.get(
+                "application_process",
+                "",
+            ).strip()
+            or structured_text.get(
+                "application_process",
+                "",
+            ).strip()
+        )
+
+        documents_text = (
+            structured_html.get(
+                "documents",
+                "",
+            ).strip()
+            or structured_text.get(
+                "documents",
+                "",
+            ).strip()
+        )
+
         return {
             "id": self.scheme_id,
-            "name": self.scheme_name,
-            "short_name": self.short_name,
+
+            "name": page_name,
+
+            "short_name": (
+                self.short_name
+                if self.short_name != self.scheme_name
+                else page_name
+            ),
 
             "category": self.category,
+
             "target_groups": self.target_groups,
 
             "eligibility": {
-                "summary": structured[
-                    "eligibility"
-                ]
+                "summary": eligibility_text,
             },
 
-            "benefits": structured[
-                "benefits"
-            ],
+            "benefits": benefits_text,
 
-            "application_process": structured[
-                "application_process"
-            ],
+            "application_process": (
+                application_text
+            ),
 
-            "documents": structured[
-                "documents"
-            ],
+            "documents": documents_text,
 
             "keywords": self.keywords,
 
@@ -188,11 +320,15 @@ class HTMLSchemeSource(GovernmentSource):
 
             "source": {
                 "authority": self.authority,
+
                 "source_type": "html",
+
                 "url": self.source_url,
+
                 "domain": urlparse(
                     self.source_url
                 ).netloc.lower(),
+
                 "fetched_at": datetime.now(
                     timezone.utc
                 ).isoformat(),

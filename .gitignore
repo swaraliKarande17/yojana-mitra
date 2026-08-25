@@ -30,3 +30,4 @@ backend/app/data/*.db-shm
 backend/app/data/*.db-wal
 
 ingestion_debug.log
+ingestion_20_portals.log

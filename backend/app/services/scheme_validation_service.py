@@ -11,15 +11,6 @@ class SchemeValidationResult:
 
 
 class SchemeValidationService:
-    """
-    Validates whether a discovered government page is
-    good enough to be stored as a real scheme record.
-
-    Main rule:
-    A page must come from a trusted government domain
-    AND contain usable extracted scheme information.
-    """
-
     BLOCKED_PATH_KEYWORDS = {
         "help",
         "contact",
@@ -38,12 +29,9 @@ class SchemeValidationService:
         "press",
         "login",
         "signin",
-        "sign-in",
         "screenreader",
-        "screen-reader",
         "directory",
         "minister",
-        "ministers",
         "history",
         "publication",
         "statistics",
@@ -58,6 +46,25 @@ class SchemeValidationService:
         "circular",
         "weather",
         "result",
+        "search",
+        "category",
+        "categories",
+    }
+
+    BLOCKED_SCHEME_NAMES = {
+        "close",
+        "english",
+        "hindi",
+        "हिंदी",
+        "क्लिक करें",
+        "click here",
+        "read more",
+        "view more",
+        "loading",
+        "loading...",
+        "schemes",
+        "policies & schemes",
+        "policies and schemes",
     }
 
     SCHEME_SIGNALS = {
@@ -137,10 +144,6 @@ class SchemeValidationService:
             )
         ).strip()
 
-        # -------------------------------------------------
-        # Required basic fields
-        # -------------------------------------------------
-
         if not scheme_id:
             return SchemeValidationResult(
                 False,
@@ -153,15 +156,33 @@ class SchemeValidationService:
                 "Missing scheme name.",
             )
 
+        normalized_name = (
+            name.lower()
+            .strip()
+        )
+
+        if (
+            normalized_name
+            in self.BLOCKED_SCHEME_NAMES
+        ):
+            return SchemeValidationResult(
+                False,
+                "Scheme name is generic or invalid.",
+            )
+
+        if normalized_name.startswith(
+            "loading"
+        ):
+            return SchemeValidationResult(
+                False,
+                "Scheme name is generic or invalid.",
+            )
+
         if not url:
             return SchemeValidationResult(
                 False,
                 "Missing official source URL.",
             )
-
-        # -------------------------------------------------
-        # URL validation
-        # -------------------------------------------------
 
         parsed = urlparse(url)
 
@@ -201,19 +222,11 @@ class SchemeValidationService:
                 "Page looks like navigation/admin content.",
             )
 
-        # -------------------------------------------------
-        # Official page must contain actual content
-        # -------------------------------------------------
-
         if len(official_text) < 120:
             return SchemeValidationResult(
                 False,
                 "Official content is too short.",
             )
-
-        # -------------------------------------------------
-        # Determine whether page looks scheme-related
-        # -------------------------------------------------
 
         benefits = str(
             scheme.get(
@@ -280,10 +293,6 @@ class SchemeValidationService:
             in self.STRONG_IDENTITY_SIGNALS
         )
 
-        # -------------------------------------------------
-        # Count actual extracted useful fields
-        # -------------------------------------------------
-
         meaningful_sections = 0
 
         if benefits:
@@ -298,18 +307,11 @@ class SchemeValidationService:
         if documents:
             meaningful_sections += 1
 
-        # This is the important safety gate.
-        # We do NOT store a page merely because its URL
-        # contains "scheme".
         if meaningful_sections < 1:
             return SchemeValidationResult(
                 False,
                 "No usable scheme details were extracted.",
             )
-
-        # -------------------------------------------------
-        # Require sufficient scheme evidence
-        # -------------------------------------------------
 
         if len(matched_signals) < 2:
             return SchemeValidationResult(
@@ -318,18 +320,11 @@ class SchemeValidationService:
             )
 
         if not strong_scheme_identity:
-            # Some valid pages may not literally include
-            # "scheme" in the URL, so structured extraction
-            # can still save them if evidence is strong.
             if meaningful_sections < 2:
                 return SchemeValidationResult(
                     False,
                     "Page identity is too weak for a scheme record.",
                 )
-
-        # -------------------------------------------------
-        # Final acceptance
-        # -------------------------------------------------
 
         return SchemeValidationResult(
             True,
@@ -348,13 +343,9 @@ class SchemeValidationService:
 
         return (
             domain == "gov.in"
-            or domain.endswith(
-                ".gov.in"
-            )
+            or domain.endswith(".gov.in")
             or domain == "nic.in"
-            or domain.endswith(
-                ".nic.in"
-            )
+            or domain.endswith(".nic.in")
         )
 
 

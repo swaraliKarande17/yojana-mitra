@@ -36,24 +36,39 @@ async def fake_fetch_schemes(self):
                             Farmer Support Scheme
                         </h1>
 
+                        <p>
+                            Farmer Support Scheme is a government
+                            programme created to provide financial
+                            and agricultural assistance to eligible
+                            farmers.
+                        </p>
+
                         <h2>Eligibility</h2>
                         <p>
-                            Applicant must be a farmer.
+                            Small and marginal farmers with valid
+                            agricultural land records may apply
+                            under the scheme.
                         </p>
 
                         <h2>Benefits</h2>
                         <p>
-                            Financial support is provided.
+                            Eligible farmers receive financial
+                            assistance and support for agricultural
+                            development activities.
                         </p>
 
                         <h2>How to Apply</h2>
                         <p>
-                            Apply on the official portal.
+                            Applications can be submitted through
+                            the official government portal after
+                            completing the required registration.
                         </p>
 
                         <h2>Documents Required</h2>
                         <p>
-                            Aadhaar Card
+                            Aadhaar Card, bank account details,
+                            identity proof and valid land records
+                            are required.
                         </p>
                     </body>
                 </html>
@@ -134,6 +149,11 @@ async def test_discovery_ingestion_to_sqlite(
     )
 
     assert (
-        "Financial support"
-        in saved["benefits"]
+            "financial assistance"
+            in saved["benefits"].lower()
+    )
+
+    assert (
+            "agricultural development"
+            in saved["benefits"].lower()
     )
