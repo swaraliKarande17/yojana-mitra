@@ -343,15 +343,53 @@ class HTMLDiscoverySource:
 
     @staticmethod
     def _normalize_https_url(
-        url: str,
+            url: str,
     ) -> str:
-        parsed = urlparse(
-            url.strip()
+        """
+        Normalize discovered URLs so the same page is not
+        processed multiple times.
+
+        Examples:
+
+        /schemes#top
+        /schemes#content
+        /schemes
+
+        all become:
+
+        /schemes
+        """
+
+        value = str(url or "").strip()
+
+        if not value:
+            return ""
+
+        # Remove #fragment
+        value, _ = urldefrag(value)
+
+        parsed = urlparse(value)
+
+        scheme = parsed.scheme.lower()
+
+        if scheme == "http":
+            scheme = "https"
+
+        # Remove accidental duplicate slashes from path.
+        path = parsed.path
+
+        while "//" in path:
+            path = path.replace("//", "/")
+
+        # Keep root as "/".
+        if path != "/":
+            path = path.rstrip("/")
+
+        normalized = parsed._replace(
+            scheme=scheme,
+            netloc=parsed.netloc.lower(),
+            path=path,
+            fragment="",
         )
 
-        if parsed.scheme == "http":
-            return parsed._replace(
-                scheme="https"
-            ).geturl()
-
-        return url.strip()
+        return normalized.geturl()
